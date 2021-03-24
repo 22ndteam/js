@@ -1,0 +1,163 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Making your first Phaser 3 Game - Part 1</title>
+    <script src="../../phaser/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 1920,
+        height: 1080,
+        physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: false,
+            debug: true
+        }
+    },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+        this.load.atlas('tomoe','assets/TomoeTex.png','assets/TomoeTex.json')
+        var map = this.load.tilemapTiledJSON('Level1', 'assets/Level1.json');
+        this.load.spritesheet('tiles', 'assets/Map1.png', {frameWidth: 64, frameHeight: 64});
+    }
+
+    function create ()
+    {
+
+        var map = this.make.tilemap({key: 'Level1'});
+        var Tiles = map.addTilesetImage('Map1','tiles')
+
+        //ground layer
+
+        this.groundLayer = map.createLayer('dirtLayer', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('grassLayer', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('patchLayer', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('flowerLayer', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('shieldLayer', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('treeLayer1', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('treeLayer2', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('treeLayer3', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('treeLayer4', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('treeLayer5', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('treeLayer6', Tiles, 0, 0);
+        this.groundLayer = map.createLayer('treeLayer7', Tiles, 0, 0);
+
+        //world boundaries
+        this.physics.world.bounds.width = this.groundLayer.width;
+        this.physics.world.bounds.height = this.groundLayer.height;
+
+        //object layers
+        var right = map.findObject("objectLayer", obj => obj.name === "Right");
+        var left = map.findObject("objectLayer", obj => obj.name === "Left");
+        var startPoint = map.findObject("objectLayer", obj => obj.name === "startPoint");
+
+
+        //character sprites
+        this.player = this.physics.add.sprite(startPoint.x, startPoint.y, 'tomoe')
+        this.player.setScale(1);
+        this.player.setCollideWorldBounds(true);
+
+        window.player = this.player;
+
+        this.anims.create({
+            key:'IdleRight',
+            frames:[
+                {key:'tomoe',frame:'IdleRight01'},    
+                {key:'tomoe',frame:'IdleRight02'},
+            ],
+            frameRate:5,
+            repeat:-1
+        })
+
+        this.anims.create({
+            key:'TomoeRunRight',
+            frames:[
+                {key:'tomoe',frame:'WalkRight01'},
+                {key:'tomoe',frame:'WalkRight02'},
+                {key:'tomoe',frame:'WalkRight03'},
+                {key:'tomoe',frame:'WalkRight04'},
+                {key:'tomoe',frame:'WalkRight05'},
+
+            ],
+            frameRate:10,
+            repeat:-1
+        });
+
+        this.anims.create({
+            key:'TomoeAttack',
+            frames:[
+                {key:'tomoe',frame:'Attack01'},
+                {key:'tomoe',frame:'Attack02'},
+
+            ],
+            frameRate:10,
+            repeat:-1
+        });
+
+        this.cursors = this.input.keyboard.createCursorKeys();
+
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        this.cameras.main.startFollow(this.player);
+
+        this.groundLayer.setCollisionByProperty({shield:true})
+        this.groundLayer.setCollisionByProperty({tree:true})
+
+
+    }
+
+    function update (time, delta) {
+
+if ( this.cursors.left.isDown) {
+    this.player.body.setVelocityX(-200);
+    this.player.anims.play('TomoeRunRight', true);
+    this.player.flipX = true;
+
+} else if ( this.cursors.right.isDown)
+{
+    this.player.body.setVelocityX(200);
+    this.player.anims.play('TomoeRunRight', true);
+    this.player.flipX = false;
+
+} else if ( this.cursors.up.isDown )
+{
+    this.player.body.setVelocityY(-200);  
+    this.player.anims.play('TomoeRunRight', true);
+
+} else if ( this.cursors.down.isDown )
+{
+    this.player.body.setVelocityY(200);  
+    this.player.anims.play('TomoeRunRight', true);  
+
+} else {
+    this.player.anims.play('IdleRight', true);
+    this.player.body.setVelocity(0,0); 
+
+}
+
+}
+
+
+</script>
+
+</body>
+</html>
