@@ -142,37 +142,59 @@ class level1 extends Phaser.Scene {
             repeat:-1
         });
 		
-		this.enemies = this.physics.add.group();
+		this.enemies1 = this.physics.add.group();
+        this.enemies2 = this.physics.add.group();
+        this.enemies3 = this.physics.add.group();
 		
-		this.enemies.create(enemy01.x, enemy01.y, 'samurai').setScale(1);
-		this.enemies.create(enemy02.x, enemy02.y, 'samurai').setScale(1);
-		this.enemies.create(enemy03.x, enemy03.y, 'samurai').setScale(1);
-		this.enemies.create(enemy04.x, enemy04.y, 'samurai').setScale(1);
-		this.enemies.create(enemy05.x, enemy05.y, 'samurai').setScale(1);
-		this.enemies.create(enemy06.x, enemy06.y, 'samurai').setScale(1);
-		this.enemies.create(enemy07.x, enemy07.y, 'samurai').setScale(1);
+		this.enemies1.create(enemy01.x, enemy01.y, 'samurai').setScale(1);
+		this.enemies1.create(enemy02.x, enemy02.y, 'samurai').setScale(1);
+		this.enemies1.create(enemy03.x, enemy03.y, 'samurai').setScale(1);
+		this.enemies2.create(enemy04.x, enemy04.y, 'samurai').setScale(1).setCollideWorldBounds(true);
+		this.enemies2.create(enemy05.x, enemy05.y, 'samurai').setScale(1).setCollideWorldBounds(true);
+		this.enemies3.create(enemy06.x, enemy06.y, 'samurai').setScale(1).setCollideWorldBounds(true);
+		this.enemies3.create(enemy07.x, enemy07.y, 'samurai').setScale(1).setCollideWorldBounds(true);
 		
-		this.physics.add.collider(this.groundLayer1, this.enemies);
-		this.physics.add.collider(this.groundLayer3, this.enemies);
-		this.physics.add.collider(this.groundLayer4, this.enemies);
-		this.physics.add.collider(this.groundLayer5, this.enemies);
-		this.physics.add.collider(this.groundLayer6, this.enemies);
-		this.physics.add.collider(this.groundLayer7, this.enemies);
-		this.physics.add.collider(this.groundLayer8, this.enemies);
+		this.physics.add.collider(this.groundLayer1, this.enemies1);
+		this.physics.add.collider(this.groundLayer3, this.enemies1);
+		this.physics.add.collider(this.groundLayer4, this.enemies1);
+		this.physics.add.collider(this.groundLayer5, this.enemies1);
+		this.physics.add.collider(this.groundLayer6, this.enemies1);
+		this.physics.add.collider(this.groundLayer7, this.enemies1);
+		this.physics.add.collider(this.groundLayer8, this.enemies1);
+
+        this.physics.add.collider(this.groundLayer1, this.enemies2);
+		this.physics.add.collider(this.groundLayer3, this.enemies2);
+		this.physics.add.collider(this.groundLayer4, this.enemies2);
+		this.physics.add.collider(this.groundLayer5, this.enemies2);
+		this.physics.add.collider(this.groundLayer6, this.enemies2);
+		this.physics.add.collider(this.groundLayer7, this.enemies2);
+		this.physics.add.collider(this.groundLayer8, this.enemies2);
+
+        this.physics.add.collider(this.groundLayer1, this.enemies3);
+		this.physics.add.collider(this.groundLayer3, this.enemies3);
+		this.physics.add.collider(this.groundLayer4, this.enemies3);
+		this.physics.add.collider(this.groundLayer5, this.enemies3);
+		this.physics.add.collider(this.groundLayer6, this.enemies3);
+		this.physics.add.collider(this.groundLayer7, this.enemies3);
+		this.physics.add.collider(this.groundLayer8, this.enemies3);
 		
-		this.enemies.children.iterate(samurai => {
+		this.enemies1.children.iterate(samurai => {
         samurai.play('EnemyRunRight');
 		samurai.flipX = true;
-		samurai.setVelocity(-50,50)
-        samurai.setCollideWorldBounds(true);
+        this.physics.moveToObject( samurai, this.player, 30, 5000);
       })
 
 		//this.enemies.startFollow(this.player);
 		
 		//left right movement
-		this.time.addEvent({ delay: 1000, callback: this.moveRightLeft, callbackScope: this, loop: false });
+	    this.time.addEvent({ delay: 2000, callback: this.moveLeft, callbackScope: this, loop: true });
+        this.time.addEvent({ delay: 4000, callback: this.moveRight, callbackScope: this, loop: true });
+	    this.time.addEvent({ delay: 2000, callback: this.moveUp, callbackScope: this, loop: true });
+        this.time.addEvent({ delay: 4000, callback: this.moveDown, callbackScope: this, loop: true });
 		
-		this.physics.add.overlap(this.player, this.enemies, this.minusHealth, null, this);
+		this.physics.add.overlap(this.player, this.enemies1, this.minusHealth1, null, this);
+		this.physics.add.overlap(this.player, this.enemies2, this.minusHealth2, null, this);
+		this.physics.add.overlap(this.player, this.enemies3, this.minusHealth3, null, this);
 		
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -191,7 +213,7 @@ if ( this.cursors.left.isDown) {
 
 } else if ( this.cursors.right.isDown)
 {
-    this.player.body.setVelocityX(200);
+    this.player.body.setVelocityX(500);
     this.player.anims.play('TomoeRunRight', true);
     this.player.flipX = false;
 
@@ -216,6 +238,15 @@ if ( this.cursors.left.isDown) {
     this.player.body.setVelocity(0,0); 
 
 }
+
+if (this.enemies2.VelocityX > 0) {
+    samurai.play('EnemyRunRight');
+} else if (this.enemies2.VelocityX = 0) {
+    samurai.play('EnemyIdleRight');
+} else if (this.enemies2.VelocityX < 0) {
+    samurai.play('EnemyRunRight');
+    this.enemies2.flipX = true;
+}
 	 
     if (this.player.x >=4050) {
         console.log('end zone')
@@ -227,11 +258,11 @@ if ( this.cursors.left.isDown) {
 
 }
 	
- minusHealth (player, enemies)
+ minusHealth1 (player, enemies1)
 {	if (this.cursors.space.isDown) {
-	enemies.disableBody(true, true);
+	enemies1.disableBody(true, true);
 }	else if (this.cursors.space.isDown === false) {
-    enemies.disableBody(true, true);
+    enemies1.disableBody(true, true);
 	this.liveCount -= 1;
     this.cameras.main.shake(200);}
 	    if ( this.liveCount === 2) {
@@ -256,26 +287,110 @@ if ( this.cursors.left.isDown) {
         this.liveCount = 3;
         this.scene.start('gameoverScene');
     },[], this);
-    }
-	
+    }	
 }
 
-	//enemies left right
-    moveRightLeft() {
-        console.log('moveRightLeft')
-        this.tweens.timeline({
-            targets: this.enemies,
-            loop: -1,
-            ease: 'Linear',
-            duration: 1000,
-            tweens: [
-            {
-                x: 400,
-            },
-            {
-                x: 200,
-            },
-        ]
+minusHealth2 (player, enemies2)
+{	if (this.cursors.space.isDown) {
+	enemies2.disableBody(true, true);
+}	else if (this.cursors.space.isDown === false) {
+    enemies2.disableBody(true, true);
+	this.liveCount -= 1;
+    this.cameras.main.shake(200);}
+	    if ( this.liveCount === 2) {
+        //this.explodeSnd.play();
+        this.heart3.setVisible(false);
+    } else if ( this.liveCount === 1) {
+        //this.explodeSnd.play();
+        this.heart2.setVisible(false);
+    } else if ( this.liveCount === 0) {
+        //this.explodeSnd.play();
+        this.cameras.main.shake(1000);
+        this.heart1.setVisible(false);
+        this.isDead = true;
+    }
+	
+    if ( this.isDead ) {
+    console.log("Player Dies")
+    // delay 1 sec
+    this.time.delayedCall(1000,function() {
+        // Reset counter before a restart
+        this.isDead = false;
+        this.liveCount = 3;
+        this.scene.start('gameoverScene');
+    },[], this);
+    }	
+}
+
+minusHealth3 (player, enemies3)
+{	if (this.cursors.space.isDown) {
+	enemies3.disableBody(true, true);
+}	else if (this.cursors.space.isDown === false) {
+    enemies3.disableBody(true, true);
+	this.liveCount -= 1;
+    this.cameras.main.shake(200);}
+	    if ( this.liveCount === 2) {
+        //this.explodeSnd.play();
+        this.heart3.setVisible(false);
+    } else if ( this.liveCount === 1) {
+        //this.explodeSnd.play();
+        this.heart2.setVisible(false);
+    } else if ( this.liveCount === 0) {
+        //this.explodeSnd.play();
+        this.cameras.main.shake(1000);
+        this.heart1.setVisible(false);
+        this.isDead = true;
+    }
+	
+    if ( this.isDead ) {
+    console.log("Player Dies")
+    // delay 1 sec
+    this.time.delayedCall(1000,function() {
+        // Reset counter before a restart
+        this.isDead = false;
+        this.liveCount = 3;
+        this.scene.start('gameoverScene');
+    },[], this);
+    }	
+}
+
+    moveLeft(left) {
+        this.tweens.add({
+            targets: this.enemies2.getChildren().map(function (c) { return c.body.velocity }),
+            x: Phaser.Math.Between(-300, -50) ,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: false
+        });
+    }
+
+    moveRight(right) {
+        this.tweens.add({
+            targets: this.enemies2.getChildren().map(function (c) { return c.body.velocity }),
+            x: Phaser.Math.Between(50, 300) ,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: false
+        });
+    }
+
+    moveUp(up) {
+        this.tweens.add({
+            targets: this.enemies3.getChildren().map(function (c) { return c.body.velocity }),
+            y: Phaser.Math.Between(-150, -50) ,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: false
+        });
+    }
+
+    moveDown(down) {
+        this.tweens.add({
+            targets: this.enemies3.getChildren().map(function (c) { return c.body.velocity }),
+            y: Phaser.Math.Between(50, 150) ,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: false
         });
     }
 

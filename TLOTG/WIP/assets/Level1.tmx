@@ -325,13 +325,13 @@
   <object id="12" name="startPoint" x="159" y="797">
    <point/>
   </object>
-  <object id="13" name="enemy01" x="1022" y="462">
+  <object id="13" name="enemy01" x="770" y="488">
    <point/>
   </object>
-  <object id="15" name="enemy02" x="1344" y="764">
+  <object id="15" name="enemy02" x="1028" y="770">
    <point/>
   </object>
-  <object id="16" name="enemy03" x="1450" y="1080">
+  <object id="16" name="enemy03" x="1216" y="1088">
    <point/>
   </object>
   <object id="17" name="enemy04" x="2374" y="532">
