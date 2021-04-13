@@ -29,7 +29,7 @@ class credits extends Phaser.Scene {
             repeat:-1
         });
 
-		this.physics.add.sprite(640, 455, 'continue').play('proceedflicker')
+		this.physics.add.sprite(640, 525, 'continue').play('proceedflicker')
 		
         console.log("This is credits");
 

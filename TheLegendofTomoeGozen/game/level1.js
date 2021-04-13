@@ -296,6 +296,7 @@ if ( this.cursors.left.isDown) {
         this.liveCount = 3;
 		this.bgmSnd.loop = false;
 		this.bgmSnd.stop()
+        this.scene.stop('level1Scene');
         this.scene.start('gameoverScene');
     },[], this);
     }	
@@ -329,6 +330,9 @@ minusHealth2 (player, enemies2)
         // Reset counter before a restart
         this.isDead = false;
         this.liveCount = 3;
+		this.bgmSnd.loop = false;
+		this.bgmSnd.stop()
+        this.scene.stop('level1Scene');
         this.scene.start('gameoverScene');
     },[], this);
     }	
@@ -362,6 +366,9 @@ minusHealth3 (player, enemies3)
         // Reset counter before a restart
         this.isDead = false;
         this.liveCount = 3;
+		this.bgmSnd.loop = false;
+		this.bgmSnd.stop()
+        this.scene.stop('level1Scene');
         this.scene.start('gameoverScene');
     },[], this);
     }	
